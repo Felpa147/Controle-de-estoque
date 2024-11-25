@@ -1,8 +1,8 @@
 ﻿using Controle_de_estoque.Data;
 using Controle_de_estoque.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace Controle_de_estoque.Controllers
 {
@@ -32,16 +32,29 @@ namespace Controle_de_estoque.Controllers
 
             if (categoria == null)
             {
-                return NotFound();
+                return NotFound("Categoria não encontrada.");
             }
 
             return categoria;
         }
 
         // POST: api/Categorias
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
+            // Validação: Verificar se o nome da categoria já existe
+            if (await _context.Categorias.AnyAsync(c => c.Nome == categoria.Nome))
+            {
+                return BadRequest("Já existe uma categoria com este nome.");
+            }
+
+            // Validação de modelo
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.Categorias.Add(categoria);
             await _context.SaveChangesAsync();
 
@@ -49,12 +62,25 @@ namespace Controle_de_estoque.Controllers
         }
 
         // PUT: api/Categorias/5
+        [Authorize(Roles = "Administrador")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
         {
             if (id != categoria.CategoriaId)
             {
-                return BadRequest();
+                return BadRequest("O ID fornecido não corresponde ao ID da categoria.");
+            }
+
+            // Validação: Verificar se o nome da categoria já existe (exceto para a própria categoria)
+            if (await _context.Categorias.AnyAsync(c => c.Nome == categoria.Nome && c.CategoriaId != id))
+            {
+                return BadRequest("Já existe outra categoria com este nome.");
+            }
+
+            // Validação de modelo
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             _context.Entry(categoria).State = EntityState.Modified;
@@ -67,7 +93,7 @@ namespace Controle_de_estoque.Controllers
             {
                 if (!CategoriaExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Categoria não encontrada.");
                 }
                 else
                 {
@@ -79,13 +105,21 @@ namespace Controle_de_estoque.Controllers
         }
 
         // DELETE: api/Categorias/5
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoria(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);
             if (categoria == null)
             {
-                return NotFound();
+                return NotFound("Categoria não encontrada.");
+            }
+
+            // Regra de negócio: Não permitir excluir categoria com produtos associados
+            bool hasProdutos = await _context.Produtos.AnyAsync(p => p.CategoriaId == id);
+            if (hasProdutos)
+            {
+                return BadRequest("Não é possível excluir uma categoria que possui produtos associados.");
             }
 
             _context.Categorias.Remove(categoria);

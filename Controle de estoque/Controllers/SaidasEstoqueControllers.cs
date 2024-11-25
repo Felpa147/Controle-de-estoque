@@ -1,7 +1,10 @@
 ﻿using Controle_de_estoque.Data;
 using Controle_de_estoque.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System;
 
 namespace Controle_de_estoque.Controllers
 {
@@ -17,10 +20,25 @@ namespace Controle_de_estoque.Controllers
         }
 
         // POST: api/SaidasEstoque
+        [Authorize(Roles = "Operador,Administrador")]
         [HttpPost]
         public async Task<ActionResult<SaidaEstoque>> PostSaidaEstoque(SaidaEstoque saidaEstoque)
         {
-            // Verifica se o produto existe
+            if (saidaEstoque.Quantidade <= 0)
+            {
+                return BadRequest("A quantidade deve ser maior que zero.");
+            }
+
+            if (saidaEstoque.DataSaida.Date > DateTime.Now.Date)
+            {
+                return BadRequest("A data de saída não pode ser futura.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var produto = await _context.Produtos.FindAsync(saidaEstoque.ProdutoId);
             if (produto == null)
             {
@@ -36,7 +54,6 @@ namespace Controle_de_estoque.Controllers
             // Adiciona a saída de estoque
             _context.SaidasEstoque.Add(saidaEstoque);
 
-            // Atualiza o QuantidadeEmEstoque do Produto
             produto.QuantidadeEmEstoque -= saidaEstoque.Quantidade;
 
             await _context.SaveChangesAsync();

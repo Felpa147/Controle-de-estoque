@@ -1,7 +1,10 @@
 ﻿using Controle_de_estoque.Data;
 using Controle_de_estoque.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Controle_de_estoque.Controllers
 {
@@ -37,16 +40,32 @@ namespace Controle_de_estoque.Controllers
 
             if (produto == null)
             {
-                return NotFound();
+                return NotFound("Produto não encontrado.");
             }
 
             return produto;
         }
 
         // POST: api/Produtos
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<ActionResult<Produto>> PostProduto(Produto produto)
         {
+            if (await _context.Produtos.AnyAsync(p => p.CodigoIdentificacao == produto.CodigoIdentificacao))
+            {
+                return BadRequest("Já existe um produto com este código de identificação.");
+            }
+
+            if (produto.DataValidade <= System.DateTime.Now)
+            {
+                return BadRequest("A data de validade deve ser futura.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
 
@@ -54,13 +73,37 @@ namespace Controle_de_estoque.Controllers
         }
 
         // PUT: api/Produtos/5
+        [Authorize(Roles = "Administrador")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduto(int id, Produto produto)
         {
             if (id != produto.ProdutoId)
             {
-                return BadRequest();
+                return BadRequest("O ID fornecido não corresponde ao ID do produto.");
             }
+
+            if (await _context.Produtos.AnyAsync(p => p.CodigoIdentificacao == produto.CodigoIdentificacao && p.ProdutoId != id))
+            {
+                return BadRequest("Já existe outro produto com este código de barras.");
+            }
+
+            if (produto.DataValidade <= System.DateTime.Now)
+            {
+                return BadRequest("A data de validade deve ser futura.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Evitar atualização direta da quantidade em estoque, apenas os controllers de saida e entrada podem fazer isso.
+            var quantidadeEmEstoqueAtual = await _context.Produtos
+                .Where(p => p.ProdutoId == id)
+                .Select(p => p.QuantidadeEmEstoque)
+                .FirstOrDefaultAsync();
+
+            produto.QuantidadeEmEstoque = quantidadeEmEstoqueAtual;
 
             _context.Entry(produto).State = EntityState.Modified;
 
@@ -72,7 +115,7 @@ namespace Controle_de_estoque.Controllers
             {
                 if (!ProdutoExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Produto não encontrado.");
                 }
                 else
                 {
@@ -84,13 +127,22 @@ namespace Controle_de_estoque.Controllers
         }
 
         // DELETE: api/Produtos/5
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduto(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);
             if (produto == null)
             {
-                return NotFound();
+                return NotFound("Produto não encontrado.");
+            }
+
+            bool hasEntradas = await _context.EntradasEstoque.AnyAsync(e => e.ProdutoId == id);
+            bool hasSaidas = await _context.SaidasEstoque.AnyAsync(s => s.ProdutoId == id);
+
+            if (hasEntradas || hasSaidas)
+            {
+                return BadRequest("Não é possível excluir um produto que possui movimentações de estoque associadas.");
             }
 
             _context.Produtos.Remove(produto);

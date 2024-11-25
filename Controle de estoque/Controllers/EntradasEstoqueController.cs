@@ -1,5 +1,6 @@
 ﻿using Controle_de_estoque.Data;
 using Controle_de_estoque.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,18 +18,32 @@ namespace Controle_de_estoque.Controllers
         }
 
         // POST: api/EntradasEstoque
+        [Authorize(Roles = "Operador,Administrador")]
         [HttpPost]
         public async Task<ActionResult<EntradaEstoque>> PostEntradaEstoque(EntradaEstoque entradaEstoque)
         {
-            // Adiciona a entrada de estoque
-            _context.EntradasEstoque.Add(entradaEstoque);
+            if (entradaEstoque.Quantidade <= 0)
+            {
+                return BadRequest("A quantidade deve ser maior que zero.");
+            }
 
-            // Atualiza o QuantidadeEmEstoque do Produto
+            if (entradaEstoque.DataEntrada.Date > DateTime.Now.Date)
+            {
+                return BadRequest("A data de entrada não pode ser futura.");
+            }
+
             var produto = await _context.Produtos.FindAsync(entradaEstoque.ProdutoId);
             if (produto == null)
             {
                 return BadRequest("Produto não encontrado.");
             }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.EntradasEstoque.Add(entradaEstoque);
 
             produto.QuantidadeEmEstoque += entradaEstoque.Quantidade;
 

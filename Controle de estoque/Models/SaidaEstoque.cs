@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Controle_de_estoque.Models
 {
@@ -8,20 +9,23 @@ namespace Controle_de_estoque.Models
         [Key]
         public int SaidaEstoqueId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O ProdutoId é obrigatório.")]
         public int ProdutoId { get; set; }
         public Produto Produto { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A quantidade é obrigatória.")]
+        [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero.")]
         public int Quantidade { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A data de saída é obrigatória.")]
         public DateTime DataSaida { get; set; }
 
+        [Required(ErrorMessage = "O preço unitário é obrigatório.")]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal PrecoVenda { get; set; }
+        [Range(0.01, double.MaxValue, ErrorMessage = "O preço unitário deve ser maior que zero.")]
+        public decimal PrecoUnitario { get; set; }
 
-        [StringLength(255)]
-        public string Observacoes { get; set; }
+        [StringLength(255, ErrorMessage = "A observação não pode exceder 255 caracteres.")]
+        public string Observacao { get; set; }
     }
 }
