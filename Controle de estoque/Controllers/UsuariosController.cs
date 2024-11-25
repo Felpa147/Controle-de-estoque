@@ -45,7 +45,6 @@ namespace Controle_de_estoque.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            // Hashear a senha fornecida
             var senhaHash = HashPassword(login.Senha);
 
             var usuario = await _context.Usuarios
@@ -106,19 +105,16 @@ namespace Controle_de_estoque.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            // Validação: Verificar se o nome de usuário já existe
             if (await _context.Usuarios.AnyAsync(u => u.NomeUsuario == usuario.NomeUsuario))
             {
                 return BadRequest("Já existe um usuário com este nome de usuário.");
             }
 
-            // Validação de modelo
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Hashear a senha antes de salvar
             usuario.Senha = HashPassword(usuario.Senha);
 
             _context.Usuarios.Add(usuario);
@@ -137,13 +133,11 @@ namespace Controle_de_estoque.Controllers
                 return BadRequest("O ID fornecido não corresponde ao ID do usuário.");
             }
 
-            // Validação: Verificar se o nome de usuário já existe em outro usuário
             if (await _context.Usuarios.AnyAsync(u => u.NomeUsuario == usuario.NomeUsuario && u.UsuarioId != id))
             {
                 return BadRequest("Já existe outro usuário com este nome de usuário.");
             }
 
-            // Validação de modelo
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -162,7 +156,6 @@ namespace Controle_de_estoque.Controllers
             }
             else
             {
-                // Hashear a nova senha
                 usuario.Senha = HashPassword(usuario.Senha);
             }
 

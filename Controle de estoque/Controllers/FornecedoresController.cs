@@ -45,13 +45,11 @@ namespace Controle_de_estoque.Controllers
         [HttpPost]
         public async Task<ActionResult<Fornecedor>> PostFornecedor(Fornecedor fornecedor)
         {
-            // Validação: Verificar se o CNPJ já existe
             if (await _context.Fornecedores.AnyAsync(f => f.CNPJ == fornecedor.CNPJ))
             {
                 return BadRequest("Já existe um fornecedor com este CNPJ.");
             }
 
-            // Validação do modelo
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -79,7 +77,6 @@ namespace Controle_de_estoque.Controllers
                 return BadRequest("Já existe outro fornecedor com este CNPJ.");
             }
 
-            // Validação do modelo
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -117,14 +114,14 @@ namespace Controle_de_estoque.Controllers
                 return NotFound("Fornecedor não encontrado.");
             }
 
-            // Regra de negócio: Não permitir excluir fornecedor com produtos associados
+            // Não permitir excluir fornecedor com produtos associados
             bool hasProdutos = await _context.Produtos.AnyAsync(p => p.FornecedorId == id);
             if (hasProdutos)
             {
                 return BadRequest("Não é possível excluir um fornecedor que possui produtos associados.");
             }
 
-            // Regra de negócio: Não permitir excluir fornecedor com entradas de estoque associadas
+            // Não permitir excluir fornecedor com entradas de estoque associadas
             bool hasEntradasEstoque = await _context.EntradasEstoque.AnyAsync(e => e.FornecedorId == id);
             if (hasEntradasEstoque)
             {
