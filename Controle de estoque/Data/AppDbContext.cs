@@ -39,15 +39,12 @@ namespace Controle_de_estoque.Data
             modelBuilder.Entity<EntradaEstoque>()
                 .HasOne(e => e.Produto)
                 .WithMany()
-                .HasForeignKey(e => e.ProdutoId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(e => e.ProdutoId);
 
-            // Configurar relacionamento entre SaidaEstoque e Produto
-            modelBuilder.Entity<SaidaEstoque>()
-                .HasOne(s => s.Produto)
+            modelBuilder.Entity<EntradaEstoque>()
+                .HasOne(e => e.Fornecedor)
                 .WithMany()
-                .HasForeignKey(s => s.ProdutoId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(e => e.FornecedorId);
 
             // Configurar unicidade para campos específicos
             modelBuilder.Entity<Fornecedor>()
@@ -58,9 +55,6 @@ namespace Controle_de_estoque.Data
                 .HasIndex(p => p.CodigoIdentificacao)
                 .IsUnique();
 
-            modelBuilder.Entity<Usuario>()
-                .HasIndex(u => u.NomeUsuario)
-                .IsUnique();
         }
     }
 }

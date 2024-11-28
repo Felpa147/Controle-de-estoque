@@ -3,7 +3,6 @@ using System;
 using Controle_de_estoque.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,36 +11,30 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Controle_de_estoque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241125220143_UpdateUsuarioSenhaHash")]
-    partial class UpdateUsuarioSenhaHash
+    [Migration("20241127221158_RemoverJsonIgnoreDeProduto")]
+    partial class RemoverJsonIgnoreDeProduto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
             modelBuilder.Entity("Controle_de_estoque.Models.Categoria", b =>
                 {
                     b.Property<int>("CategoriaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoriaId"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("CategoriaId");
 
@@ -52,29 +45,27 @@ namespace Controle_de_estoque.Migrations
                 {
                     b.Property<int>("EntradaEstoqueId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EntradaEstoqueId"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DataEntrada")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("FornecedorId")
-                        .HasColumnType("int");
+                    b.Property<int?>("FornecedorId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Lote")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantidade")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("EntradaEstoqueId");
 
@@ -89,41 +80,42 @@ namespace Controle_de_estoque.Migrations
                 {
                     b.Property<int>("FornecedorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FornecedorId"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CNPJ")
                         .IsRequired()
                         .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Contato")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Endereco")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("FornecedorId");
+
+                    b.HasIndex("CNPJ")
+                        .IsUnique();
 
                     b.ToTable("Fornecedores");
                 });
@@ -132,33 +124,31 @@ namespace Controle_de_estoque.Migrations
                 {
                     b.Property<int>("ProdutoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProdutoId"));
+                    b.Property<int?>("CategoriaId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CodigoDeBarras")
+                    b.Property<string>("CodigoIdentificacao")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DataValidade")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("FornecedorId")
-                        .HasColumnType("int");
+                    b.Property<int?>("FornecedorId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("PrecoCompra")
                         .HasColumnType("decimal(18,2)");
@@ -167,16 +157,19 @@ namespace Controle_de_estoque.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("QuantidadeEmEstoque")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UnidadeDeMedida")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ProdutoId");
 
                     b.HasIndex("CategoriaId");
+
+                    b.HasIndex("CodigoIdentificacao")
+                        .IsUnique();
 
                     b.HasIndex("FornecedorId");
 
@@ -187,26 +180,24 @@ namespace Controle_de_estoque.Migrations
                 {
                     b.Property<int>("SaidaEstoqueId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaidaEstoqueId"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DataSaida")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Observacoes")
+                    b.Property<string>("Observacao")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<decimal>("PrecoVenda")
+                    b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantidade")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("SaidaEstoqueId");
 
@@ -219,36 +210,37 @@ namespace Controle_de_estoque.Migrations
                 {
                     b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NomeCompleto")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NomeUsuario")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Perfil")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UsuarioId");
+
+                    b.HasIndex("NomeUsuario")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });
@@ -257,9 +249,7 @@ namespace Controle_de_estoque.Migrations
                 {
                     b.HasOne("Controle_de_estoque.Models.Fornecedor", "Fornecedor")
                         .WithMany("EntradasEstoque")
-                        .HasForeignKey("FornecedorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FornecedorId");
 
                     b.HasOne("Controle_de_estoque.Models.Produto", "Produto")
                         .WithMany()
@@ -277,14 +267,12 @@ namespace Controle_de_estoque.Migrations
                     b.HasOne("Controle_de_estoque.Models.Categoria", "Categoria")
                         .WithMany("Produtos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Controle_de_estoque.Models.Fornecedor", "Fornecedor")
                         .WithMany("Produtos")
                         .HasForeignKey("FornecedorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Categoria");
 

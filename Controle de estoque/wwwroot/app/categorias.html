@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Estoque - Categorias</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/categorias.css">
+</head>
+<body>
+    <div id="categorias">
+        <h2>Gerenciar Categorias</h2>
+        <div class="categoria-actions">
+            <button onclick="mostrarFormularioAdicionar()">Adicionar Categoria</button>
+            <button onclick="window.location.href='menu.html'">Voltar ao Menu</button>
+        </div>
+        <table id="tabelaCategorias" border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Conteúdo da tabela gerado dinamicamente -->
+            </tbody>
+        </table>
+        <button id="btnLogout">Sair</button>
+    </div>
+    <div id="formularioAdicionar" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="fecharFormularioAdicionar()">&times;</span>
+            <h3>Adicionar Categoria</h3>
+            <form id="formAdicionarCategoria">
+                <div class="form-group">
+                    <label for="nomeCategoria">Nome da Categoria:</label>
+                    <input type="text" id="nomeCategoria" placeholder="Digite o nome da categoria" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricaoCategoria">Descrição da Categoria:</label>
+                    <textarea id="descricaoCategoria" placeholder="Digite a descrição" required></textarea>
+                </div>
+                <button type="button" class="btn-save" onclick="adicionarCategoria()">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+   <!-- Modal para Editar Categoria -->
+<div id="formularioEditar" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharFormularioEditar()">&times;</span>
+        <h3>Editar Categoria</h3>
+        <form id="formEditarCategoria">
+            <input type="hidden" id="categoriaId" name="categoriaId">
+            <div class="form-group">
+                <label for="editarNomeCategoria">Nome da Categoria:</label>
+                <input type="text" id="editarNomeCategoria" name="editarNomeCategoria" placeholder="Digite o nome da categoria" maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label for="editarDescricaoCategoria">Descrição da Categoria:</label>
+                <textarea id="editarDescricaoCategoria" name="editarDescricaoCategoria" placeholder="Digite a descrição" maxlength="255" required></textarea>
+            </div>
+            <button type="button" class="btn-save" onclick="atualizarCategoria()">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+    <script src="js/app.js"></script>
+    <script src="js/categorias.js"></script>
+</body>
+</html>

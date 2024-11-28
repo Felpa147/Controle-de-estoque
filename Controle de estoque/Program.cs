@@ -1,8 +1,5 @@
 using Controle_de_estoque.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 
 namespace Controle_de_estoque
@@ -13,65 +10,25 @@ namespace Controle_de_estoque
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            var chaveSecreta = builder.Configuration.GetValue<string>("Jwt:Key");
-
-            // Configuração de Autenticação JWT
-            builder.Services.AddAuthentication(options =>
+            builder.Services.AddControllers().AddJsonOptions(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false, 
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(chaveSecreta))
-                };
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             });
 
-            // Adicionar serviços ao contêiner
-            builder.Services.AddControllers();
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configurar o Swagger para documentação da API e suporte ao JWT
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SeuProjeto", Version = "v1" });
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Insira 'Bearer' [espaço] e então seu token no campo abaixo.\n\nExemplo: 'Bearer 12345abcdef'",
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Controle de Estoque API", Version = "v1" });
             });
 
             var app = builder.Build();
+
+            app.UseStaticFiles();
+
+            app.MapFallbackToFile("index.html");
 
             if (app.Environment.IsDevelopment())
             {
@@ -80,9 +37,7 @@ namespace Controle_de_estoque
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseRouting();
 
             app.MapControllers();
 

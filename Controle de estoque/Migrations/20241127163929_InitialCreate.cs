@@ -15,10 +15,10 @@ namespace Controle_de_estoque.Migrations
                 name: "Categorias",
                 columns: table => new
                 {
-                    CategoriaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Descricao = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,14 +29,14 @@ namespace Controle_de_estoque.Migrations
                 name: "Fornecedores",
                 columns: table => new
                 {
-                    FornecedorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CNPJ = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Endereco = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Contato = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    FornecedorId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    CNPJ = table.Column<string>(type: "TEXT", maxLength: 14, nullable: false),
+                    Telefone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Endereco = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Contato = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,13 +47,13 @@ namespace Controle_de_estoque.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    UsuarioId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeUsuario = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Senha = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    NomeCompleto = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Perfil = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NomeUsuario = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Senha = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    NomeCompleto = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Perfil = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,18 +64,18 @@ namespace Controle_de_estoque.Migrations
                 name: "Produtos",
                 columns: table => new
                 {
-                    ProdutoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CodigoDeBarras = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Descricao = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    CodigoIdentificacao = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     PrecoCompra = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PrecoVenda = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    QuantidadeEmEstoque = table.Column<int>(type: "int", nullable: false),
-                    UnidadeDeMedida = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    DataValidade = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoriaId = table.Column<int>(type: "int", nullable: false),
-                    FornecedorId = table.Column<int>(type: "int", nullable: false)
+                    QuantidadeEmEstoque = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnidadeDeMedida = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FornecedorId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,27 +85,27 @@ namespace Controle_de_estoque.Migrations
                         column: x => x.CategoriaId,
                         principalTable: "Categorias",
                         principalColumn: "CategoriaId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Produtos_Fornecedores_FornecedorId",
                         column: x => x.FornecedorId,
                         principalTable: "Fornecedores",
                         principalColumn: "FornecedorId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "EntradasEstoque",
                 columns: table => new
                 {
-                    EntradaEstoqueId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false),
-                    DataEntrada = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EntradaEstoqueId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantidade = table.Column<int>(type: "INTEGER", nullable: false),
+                    DataEntrada = table.Column<DateTime>(type: "TEXT", nullable: false),
                     PrecoUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FornecedorId = table.Column<int>(type: "int", nullable: false),
-                    Lote = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    FornecedorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Lote = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,13 +128,13 @@ namespace Controle_de_estoque.Migrations
                 name: "SaidasEstoque",
                 columns: table => new
                 {
-                    SaidaEstoqueId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false),
-                    DataSaida = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PrecoVenda = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Observacoes = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                    SaidaEstoqueId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantidade = table.Column<int>(type: "INTEGER", nullable: false),
+                    DataSaida = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PrecoUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Observacao = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,9 +158,21 @@ namespace Controle_de_estoque.Migrations
                 column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Fornecedores_CNPJ",
+                table: "Fornecedores",
+                column: "CNPJ",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produtos_CategoriaId",
                 table: "Produtos",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produtos_CodigoIdentificacao",
+                table: "Produtos",
+                column: "CodigoIdentificacao",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produtos_FornecedorId",
@@ -171,6 +183,12 @@ namespace Controle_de_estoque.Migrations
                 name: "IX_SaidasEstoque_ProdutoId",
                 table: "SaidasEstoque",
                 column: "ProdutoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_NomeUsuario",
+                table: "Usuarios",
+                column: "NomeUsuario",
+                unique: true);
         }
 
         /// <inheritdoc />

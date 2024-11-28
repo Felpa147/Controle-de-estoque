@@ -47,7 +47,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // POST: api/Produtos
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Produto>> PostProduto(Produto produto)
         {
@@ -69,11 +69,13 @@ namespace Controle_de_estoque.Controllers
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
 
+            await _context.Entry(produto).Reference(p => p.Categoria).LoadAsync();
+            await _context.Entry(produto).Reference(p => p.Fornecedor).LoadAsync();
             return CreatedAtAction(nameof(GetProduto), new { id = produto.ProdutoId }, produto);
         }
 
         // PUT: api/Produtos/5
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduto(int id, Produto produto)
         {
@@ -127,7 +129,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // DELETE: api/Produtos/5
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduto(int id)
         {
@@ -155,5 +157,34 @@ namespace Controle_de_estoque.Controllers
         {
             return _context.Produtos.Any(e => e.ProdutoId == id);
         }
+
+        [AllowAnonymous]
+        [HttpGet("estoque-atual")]
+        public async Task<IActionResult> GetEstoqueAtual()
+        {
+            try
+            {
+                var estoqueAtual = await _context.Produtos
+                    .Select(p => new
+                    {
+                        Produto = p.Nome,
+                        QuantidadeEmEstoque = p.QuantidadeEmEstoque
+                    })
+                    .ToListAsync();
+
+                if (estoqueAtual == null || !estoqueAtual.Any())
+                {
+                    return NoContent();
+                }
+
+                return Ok(estoqueAtual);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao obter estoque atual: {ex.Message}");
+            }
+        }
+
+
     }
 }

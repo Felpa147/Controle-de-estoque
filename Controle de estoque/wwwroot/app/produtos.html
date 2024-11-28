@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Estoque - Produtos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/produtos.css">
+</head>
+<body>
+    <div id="produtos">
+        <h2>Gerenciar Produtos</h2>
+        <div class="produto-actions">
+            <button onclick="mostrarFormularioAdicionar()">Adicionar Produto</button>
+            <button onclick="window.location.href='menu.html'">Voltar ao Menu</button>
+        </div>
+        <table id="tabelaProdutos">
+            <!-- Tabela preenchida dinamicamente -->
+        </table>
+    </div>
+
+    <!-- Modal para Adicionar Produto -->
+<div id="formularioAdicionar" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharFormularioAdicionar()">&times;</span>
+        <h3>Adicionar Produto</h3>
+        <form id="formAdicionarProduto">
+            <div class="form-group">
+                <label for="nomeProduto">Nome do Produto:</label>
+                <input type="text" id="nomeProduto" placeholder="Digite o nome do produto" required>
+            </div>
+            <div class="form-group">
+                <label for="descricaoProduto">Descrição do Produto:</label>
+                <textarea id="descricaoProduto" placeholder="Digite a descrição do produto"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="codigoIdentificacao">Código de Identificação:</label>
+                <input type="text" id="codigoIdentificacao" placeholder="Digite o código de identificação" required>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <label for="precoCompra">Preço de Compra:</label>
+                    <input type="number" step="0.01" id="precoCompra" placeholder="Digite o preço de compra" required>
+                </div>
+                <div>
+                    <label for="precoVenda">Preço de Venda:</label>
+                    <input type="number" step="0.01" id="precoVenda" placeholder="Digite o preço de venda" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="unidadeDeMedida">Unidade de Medida:</label>
+                <input type="text" id="unidadeDeMedida" placeholder="Digite a unidade de medida">
+            </div>
+            <div class="form-group">
+                <label for="dataValidade">Data de Validade:</label>
+                <input type="date" id="dataValidade" required>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <label for="categoriaId">Categoria:</label>
+                    <select id="categoriaId" required>
+                        <!-- Opções preenchidas dinamicamente -->
+                    </select>
+                </div>
+                <div>
+                    <label for="fornecedorId">Fornecedor:</label>
+                    <select id="fornecedorId" required>
+                        <!-- Opções preenchidas dinamicamente -->
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn-save" onclick="adicionarProduto()">Salvar</button>
+        </form>
+    </div>
+</div>
+
+   <!-- Modal para Editar Produto -->
+<div id="formularioEditar" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharFormularioEditar()">&times;</span>
+        <h3>Editar Produto</h3>
+        <form id="formEditarProduto">
+            <input type="hidden" id="produtoId">
+            <div class="form-group">
+                <label for="editarNomeProduto">Nome do Produto:</label>
+                <input type="text" id="editarNomeProduto" placeholder="Digite o nome do produto" required>
+            </div>
+            <div class="form-group">
+                <label for="editarDescricaoProduto">Descrição do Produto:</label>
+                <textarea id="editarDescricaoProduto" placeholder="Digite a descrição do produto"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="editarCodigoIdentificacao">Código de Identificação:</label>
+                <input type="text" id="editarCodigoIdentificacao" placeholder="Digite o código de identificação" required>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <label for="editarPrecoCompra">Preço de Compra:</label>
+                    <input type="number" step="0.01" id="editarPrecoCompra" placeholder="Digite o preço de compra" required>
+                </div>
+                <div>
+                    <label for="editarPrecoVenda">Preço de Venda:</label>
+                    <input type="number" step="0.01" id="editarPrecoVenda" placeholder="Digite o preço de venda" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editarUnidadeDeMedida">Unidade de Medida:</label>
+                <input type="text" id="editarUnidadeDeMedida" placeholder="Digite a unidade de medida">
+            </div>
+            <div class="form-group">
+                <label for="editarDataValidade">Data de Validade:</label>
+                <input type="date" id="editarDataValidade" required>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <label for="editarCategoriaId">Categoria:</label>
+                    <select id="editarCategoriaId" required>
+                        <!-- Opções preenchidas dinamicamente -->
+                    </select>
+                </div>
+                <div>
+                    <label for="editarFornecedorId">Fornecedor:</label>
+                    <select id="editarFornecedorId" required>
+                        <!-- Opções preenchidas dinamicamente -->
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn-save" onclick="atualizarProduto()">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Botão de Logout -->
+    <button id="btnLogout">Sair</button>
+
+    <script src="js/app.js"></script>
+    <script src="js/produtos.js"></script>
+</body>
+</html>

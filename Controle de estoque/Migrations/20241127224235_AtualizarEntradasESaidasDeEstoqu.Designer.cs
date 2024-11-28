@@ -3,6 +3,7 @@ using System;
 using Controle_de_estoque.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Controle_de_estoque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127224235_AtualizarEntradasESaidasDeEstoqu")]
+    partial class AtualizarEntradasESaidasDeEstoqu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -216,16 +219,22 @@ namespace Controle_de_estoque.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Login")
+                    b.Property<string>("NomeCompleto")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NomeUsuario")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("Perfil")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Senha")
@@ -234,6 +243,9 @@ namespace Controle_de_estoque.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("UsuarioId");
+
+                    b.HasIndex("NomeUsuario")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });

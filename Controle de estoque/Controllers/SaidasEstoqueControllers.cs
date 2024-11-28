@@ -1,10 +1,9 @@
 ﻿using Controle_de_estoque.Data;
 using Controle_de_estoque.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 
 namespace Controle_de_estoque.Controllers
 {
@@ -19,46 +18,69 @@ namespace Controle_de_estoque.Controllers
             _context = context;
         }
 
+        // GET: api/SaidasEstoque
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SaidaEstoque>>> GetSaidasEstoque()
+        {
+            return await _context.SaidasEstoque
+                .Include(s => s.Produto)
+                .ToListAsync();
+        }
+
         // POST: api/SaidasEstoque
-        [Authorize(Roles = "Operador,Administrador")]
         [HttpPost]
         public async Task<ActionResult<SaidaEstoque>> PostSaidaEstoque(SaidaEstoque saidaEstoque)
         {
-            if (saidaEstoque.Quantidade <= 0)
-            {
-                return BadRequest("A quantidade deve ser maior que zero.");
-            }
-
-            if (saidaEstoque.DataSaida.Date > DateTime.Now.Date)
-            {
-                return BadRequest("A data de saída não pode ser futura.");
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            // Verificar se há quantidade suficiente em estoque
             var produto = await _context.Produtos.FindAsync(saidaEstoque.ProdutoId);
             if (produto == null)
             {
                 return BadRequest("Produto não encontrado.");
             }
 
-            // Verifica se há quantidade suficiente em estoque
             if (produto.QuantidadeEmEstoque < saidaEstoque.Quantidade)
             {
-                return BadRequest("Quantidade insuficiente em estoque.");
+                return BadRequest("Quantidade em estoque insuficiente.");
             }
 
-            // Adiciona a saída de estoque
             _context.SaidasEstoque.Add(saidaEstoque);
 
+            // Atualizar a quantidade em estoque do produto
             produto.QuantidadeEmEstoque -= saidaEstoque.Quantidade;
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(PostSaidaEstoque), new { id = saidaEstoque.SaidaEstoqueId }, saidaEstoque);
+            await _context.Entry(saidaEstoque).Reference(s => s.Produto).LoadAsync();
+
+            return CreatedAtAction(nameof(GetSaidasEstoque), new { id = saidaEstoque.SaidaEstoqueId }, saidaEstoque);
+        }
+
+        // DELETE: api/SaidasEstoque/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSaidaEstoque(int id)
+        {
+            var saidaEstoque = await _context.SaidasEstoque.FindAsync(id);
+            if (saidaEstoque == null)
+            {
+                return NotFound("Saída de estoque não encontrada.");
+            }
+
+            // Atualizar a quantidade em estoque do produto
+            var produto = await _context.Produtos.FindAsync(saidaEstoque.ProdutoId);
+            if (produto != null)
+            {
+                produto.QuantidadeEmEstoque += saidaEstoque.Quantidade;
+            }
+
+            _context.SaidasEstoque.Remove(saidaEstoque);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

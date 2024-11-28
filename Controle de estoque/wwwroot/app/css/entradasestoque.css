@@ -1,0 +1,140 @@
+/* Geral */
+#entradasEstoque {
+    margin: 20px;
+}
+
+h2 {
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Ações */
+.entrada-actions button,
+#btnLogout {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.entrada-actions button:hover,
+#btnLogout:hover {
+    background-color: #0056b3;
+}
+
+/* Tabela */
+#tabelaEntradas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#tabelaEntradas th,
+#tabelaEntradas td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+}
+
+#tabelaEntradas th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Modal */
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    font-family: Arial, sans-serif;
+}
+
+.modal-content h3 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Formulário */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    height: 80px;
+}
+
+.form-group.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.form-group.row div {
+    flex: 1;
+}
+
+/* Botão salvar */
+.btn-save {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.btn-save:hover {
+    background-color: #218838;
+}

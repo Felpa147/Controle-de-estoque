@@ -41,7 +41,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // POST: api/Fornecedores
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Fornecedor>> PostFornecedor(Fornecedor fornecedor)
         {
@@ -62,7 +62,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // PUT: api/Fornecedores/5
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFornecedor(int id, Fornecedor fornecedor)
         {
@@ -104,7 +104,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // DELETE: api/Fornecedores/5
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFornecedor(int id)
         {

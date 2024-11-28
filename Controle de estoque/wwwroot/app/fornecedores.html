@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Estoque - Fornecedores</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/fornecedores.css">
+</head>
+<body>
+    <div id="fornecedores">
+        <h2>Gerenciar Fornecedores</h2>
+        <div class="fornecedor-actions">
+            <button onclick="mostrarFormularioAdicionar()">Adicionar Fornecedor</button>
+            <button onclick="window.location.href='menu.html'">Voltar ao Menu</button>
+        </div>
+        <table id="tabelaFornecedores" border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CNPJ</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Conteúdo da tabela será preenchido dinamicamente -->
+            </tbody>
+        </table>
+        <button id="btnLogout">Sair</button>
+    </div>
+
+    <!-- Modal para Adicionar Fornecedor -->
+<div id="formularioAdicionar" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharFormularioAdicionar()">&times;</span>
+        <h3>Adicionar Fornecedor</h3>
+        <form id="formAdicionarFornecedor">
+            <div class="form-group">
+                <label for="nomeFornecedor">Nome do Fornecedor:</label>
+                <input type="text" id="nomeFornecedor" placeholder="Digite o nome do fornecedor" required>
+            </div>
+            <div class="form-group">
+                <label for="cnpjFornecedor">CNPJ:</label>
+                <input type="text" id="cnpjFornecedor" placeholder="Digite o CNPJ" required>
+            </div>
+            <div class="form-group">
+                <label for="emailFornecedor">Email:</label>
+                <input type="email" id="emailFornecedor" placeholder="Digite o email" required>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <label for="telefoneFornecedor">Telefone:</label>
+                    <input type="text" id="telefoneFornecedor" placeholder="Digite o telefone">
+                </div>
+                <div>
+                    <label for="enderecoFornecedor">Endereço:</label>
+                    <input type="text" id="enderecoFornecedor" placeholder="Digite o endereço">
+                </div>
+                <div class="form-group">
+                    <label for="contatoFornecedor">Contato:</label>
+                    <input type="text" id="contatoFornecedor" placeholder="Digite o contato" required>
+                </div>
+            </div>
+            <button type="button" class="btn-save" onclick="adicionarFornecedor()">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para Editar Fornecedor -->
+<div id="formularioEditar" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharFormularioEditar()">&times;</span>
+        <h3>Editar Fornecedor</h3>
+        <form id="formEditarFornecedor">
+            <input type="hidden" id="fornecedorId">
+            <div class="form-group">
+                <label for="editarNomeFornecedor">Nome do Fornecedor:</label>
+                <input type="text" id="editarNomeFornecedor" placeholder="Digite o nome do fornecedor" required>
+            </div>
+            <div class="form-group">
+                <label for="editarCnpjFornecedor">CNPJ:</label>
+                <input type="text" id="editarCnpjFornecedor" placeholder="Digite o CNPJ" required>
+            </div>
+            <div class="form-group">
+                <label for="editarEmailFornecedor">Email:</label>
+                <input type="email" id="editarEmailFornecedor" placeholder="Digite o email" required>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <label for="editarTelefoneFornecedor">Telefone:</label>
+                    <input type="text" id="editarTelefoneFornecedor" placeholder="Digite o telefone">
+                </div>
+                <div>
+                    <label for="editarEnderecoFornecedor">Endereço:</label>
+                    <input type="text" id="editarEnderecoFornecedor" placeholder="Digite o endereço">
+                </div>
+                <div class="form-group">
+                    <label for="editarContatoFornecedor">Contato:</label>
+                    <input type="text" id="editarContatoFornecedor" placeholder="Digite o contato" required>
+                </div>
+            </div>
+            <button type="button" class="btn-save" onclick="atualizarFornecedor()">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+    <script src="js/app.js"></script>
+    <script src="js/fornecedores.js"></script>
+</body>
+</html>

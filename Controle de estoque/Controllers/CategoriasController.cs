@@ -39,7 +39,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // POST: api/Categorias
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
@@ -62,7 +62,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // PUT: api/Categorias/5
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
         {
@@ -105,7 +105,7 @@ namespace Controle_de_estoque.Controllers
         }
 
         // DELETE: api/Categorias/5
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoria(int id)
         {

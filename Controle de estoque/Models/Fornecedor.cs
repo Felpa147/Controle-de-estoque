@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Controle_de_estoque.Models
 {
@@ -9,11 +10,9 @@ namespace Controle_de_estoque.Models
         [Key]
         public int FornecedorId { get; set; }
 
-        [Required(ErrorMessage = "O nome é obrigatório.")]
         [StringLength(100, ErrorMessage = "O nome não pode exceder 100 caracteres.")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "O CNPJ é obrigatório.")]
         [StringLength(14, ErrorMessage = "O CNPJ deve ter 14 caracteres.")]
         [RegularExpression(@"^\d{14}$", ErrorMessage = "O CNPJ deve conter apenas números.")]
         public string CNPJ { get; set; }
@@ -32,7 +31,10 @@ namespace Controle_de_estoque.Models
         public string Contato { get; set; }
 
         // Relacionamentos
-        public ICollection<Produto> Produtos { get; set; }
-        public ICollection<EntradaEstoque> EntradasEstoque { get; set; }
+        [JsonIgnore]
+        public ICollection<Produto>? Produtos { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EntradaEstoque>? EntradasEstoque { get; set; }
     }
 }

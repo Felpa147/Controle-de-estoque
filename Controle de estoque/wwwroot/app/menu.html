@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+    <div id="menuContainer">
+        <div id="menu">
+            <h1>Bem-vindo, <span id="userName">Usuário</span>!</h1>
+            <div id="menuOptions">
+                <button onclick="navigateTo('categorias.html')">Categorias</button>
+                <button onclick="navigateTo('produtos.html')">Produtos</button>
+                <button onclick="navigateTo('fornecedores.html')">Fornecedores</button>
+                <button onclick="navigateTo('entradasestoque.html')">Entradas de Estoque</button>
+                <button onclick="navigateTo('saidasestoque.html')">Saídas de Estoque</button>
+                <button id="btnLogout">Sair</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>
