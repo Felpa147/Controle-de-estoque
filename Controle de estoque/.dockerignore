@@ -1,0 +1,22 @@
+ # Diretórios de build
+bin/
+obj/
+
+# Configurações locais
+.vscode/
+.idea/
+.env
+
+# Dependências geradas
+*.dll
+*.pdb
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+
+# Outros arquivos não necessários
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+
