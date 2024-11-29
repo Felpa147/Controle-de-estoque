@@ -1,0 +1,11 @@
+[phases.setup] 
+nixpkgs = ["dotnet-sdk-8.0"] 
+ 
+[phases.install] 
+cmds = ["dotnet restore"] 
+ 
+[phases.build] 
+cmds = ["dotnet publish --no-restore -c Release -o out"] 
+ 
+[phases.start] 
+cmds = ["dotnet out/Controle_de_estoque.dll"]
