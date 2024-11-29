@@ -4,6 +4,7 @@ using Controle_de_estoque.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Controle_de_estoque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241129013516_Atuall")]
+    partial class Atuall
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +45,7 @@ namespace Controle_de_estoque.Migrations
 
                     b.HasKey("CategoriaId");
 
-                    b.ToTable("Categorias", (string)null);
+                    b.ToTable("Categorias");
                 });
 
             modelBuilder.Entity("Controle_de_estoque.Models.EntradaEstoque", b =>
@@ -84,7 +87,7 @@ namespace Controle_de_estoque.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("EntradasEstoque", (string)null);
+                    b.ToTable("EntradasEstoque");
                 });
 
             modelBuilder.Entity("Controle_de_estoque.Models.Fornecedor", b =>
@@ -132,7 +135,7 @@ namespace Controle_de_estoque.Migrations
                         .HasDatabaseName("IX_Fornecedores_CNPJ")
                         .HasAnnotation("MySQL:IndexLength", 14);
 
-                    b.ToTable("Fornecedores", (string)null);
+                    b.ToTable("Fornecedores");
                 });
 
             modelBuilder.Entity("Controle_de_estoque.Models.Produto", b =>
@@ -190,7 +193,7 @@ namespace Controle_de_estoque.Migrations
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("Produtos", (string)null);
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("Controle_de_estoque.Models.SaidaEstoque", b =>
@@ -222,7 +225,7 @@ namespace Controle_de_estoque.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("SaidasEstoque", (string)null);
+                    b.ToTable("SaidasEstoque");
                 });
 
             modelBuilder.Entity("Controle_de_estoque.Models.Usuario", b =>
@@ -254,7 +257,7 @@ namespace Controle_de_estoque.Migrations
 
                     b.HasKey("UsuarioId");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Controle_de_estoque.Models.EntradaEstoque", b =>

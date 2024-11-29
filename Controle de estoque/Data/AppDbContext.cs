@@ -39,22 +39,39 @@ namespace Controle_de_estoque.Data
             modelBuilder.Entity<EntradaEstoque>()
                 .HasOne(e => e.Produto)
                 .WithMany()
-                .HasForeignKey(e => e.ProdutoId);
+                .HasForeignKey(e => e.ProdutoId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<EntradaEstoque>()
-                .HasOne(e => e.Fornecedor)
+            // Configurar relacionamento entre EntradaEstoque e Fornecedor
+          modelBuilder.Entity<EntradaEstoque>()
+    .HasOne(e => e.Fornecedor)
+    .WithMany(f => f.EntradasEstoque) // Relacionamento inverso definido
+    .HasForeignKey(e => e.FornecedorId)
+    .OnDelete(DeleteBehavior.SetNull); // Define NULL ao excluir o fornecedor
+
+
+            // Configurar relacionamento entre SaidaEstoque e Produto
+            modelBuilder.Entity<SaidaEstoque>()
+                .HasOne(s => s.Produto)
                 .WithMany()
-                .HasForeignKey(e => e.FornecedorId);
+                .HasForeignKey(s => s.ProdutoId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Configurar unicidade para campos específicos
             modelBuilder.Entity<Fornecedor>()
-                .HasIndex(f => f.CNPJ)
-                .IsUnique();
+        .HasIndex(f => f.CNPJ)
+        .HasDatabaseName("IX_Fornecedores_CNPJ")
+        .IsUnique()
+        .HasAnnotation("MySQL:IndexLength", 14); // Especificando o comprimento do índice
 
             modelBuilder.Entity<Produto>()
                 .HasIndex(p => p.CodigoIdentificacao)
                 .IsUnique();
-
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+}
+
     }
 }

@@ -15,6 +15,7 @@ namespace Controle_de_estoque.Models
 
         [StringLength(14, ErrorMessage = "O CNPJ deve ter 14 caracteres.")]
         [RegularExpression(@"^\d{14}$", ErrorMessage = "O CNPJ deve conter apenas números.")]
+        [Column(TypeName = "VARCHAR(14)")] // Especificando VARCHAR com comprimento
         public string CNPJ { get; set; }
 
         [StringLength(20, ErrorMessage = "O telefone não pode exceder 20 caracteres.")]

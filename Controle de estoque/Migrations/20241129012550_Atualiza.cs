@@ -5,7 +5,7 @@
 namespace Controle_de_estoque.Migrations
 {
     /// <inheritdoc />
-    public partial class Adicionar : Migration
+    public partial class Atualiza : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

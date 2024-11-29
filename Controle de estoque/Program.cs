@@ -16,7 +16,11 @@ namespace Controle_de_estoque
             });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySql(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -28,7 +32,7 @@ namespace Controle_de_estoque
 
             app.UseStaticFiles();
 
-            app.MapFallbackToFile("index.html");
+            app.MapFallbackToFile("login.html");
 
             if (app.Environment.IsDevelopment())
             {
