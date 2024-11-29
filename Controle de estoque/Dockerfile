@@ -11,8 +11,9 @@ WORKDIR /src
 # Copiar todos os arquivos do projeto
 COPY . .
 
-# Restaurar pacotes, compilar e publicar a aplicação
-RUN dotnet publish Program.cs -c Release -o /app/publish
+# Restaurar pacotes e compilar
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/publish
 
 # Etapa final para rodar a aplicação
 FROM base AS final
